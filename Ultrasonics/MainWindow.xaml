@@ -1,0 +1,81 @@
+﻿<Window x:Class="Ultrasonics.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ultrasonics"
+        mc:Ignorable="d"
+        DataContextChanged="Window_DataContextChanged"
+        Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=local:MainVm}"
+        Closing="Window_Closing"
+        Title="{Binding LoadedSessionName, TargetNullValue=Ultrasonics}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="COM Port:"/>
+                <ComboBox ItemsSource="{Binding AvaliableSerialPorts}"
+                          SelectedItem="{Binding SelectedPort}"
+                          Width="100"/>
+                <Button Content="Refresh" Command="{Binding RefreshCmd}"/>
+                <Button Content="Disconnect" Command="{Binding DisconnectCmd}"/>
+                <Button Content="Reset" Command="{Binding ResetCmd}"/>
+                <Button Content="Reconnect" Command="{Binding ReconnectCmd}" RenderTransformOrigin="3.263,1131.852"/>
+                <CheckBox Content="Calibrate" IsChecked="{Binding Calibrating}" VerticalAlignment="Center"/>
+                <ToggleButton Content="Zoom" IsChecked="{Binding ZoomCharts}"/>
+                <ToggleButton Content="FFT" IsChecked="{Binding FFTCharts}"/>
+                <Label Content="Avg Period:"/>
+                <TextBox Text="{Binding AverageTime}" Width="50"/>
+                <TextBlock Text="Current Session:"/>
+                <TextBox Text="{Binding SessionName, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                <Button Content="Finish Session" Command="{Binding FinishSessionCmd}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Recorded" IsChecked="{Binding Recorded}" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding StartTimeTxt}" Width="150"/>
+                <Slider Orientation="Horizontal" Width="100" VerticalAlignment="Center"
+                    Minimum="0" Maximum="1" Value="{Binding SelectedTimePortion}"
+                        SmallChange="{Binding SmallChange}"
+                        LargeChange="{Binding LargeChange}"/>
+                <TextBox Text="{Binding EndTimeTxt}" Width="150"/>
+                <TextBlock Text="{Binding CurrentTimeTxt}" MinWidth="50"/>
+                <Button Content="Load Calibration" Command="{Binding LoadCalibrationCmd}"/>
+                <Button Content="Load Session" Command="{Binding LoadSessionCmd}"/>
+                <TextBlock Text="{Binding SessionName}"/>
+                <Button Content="Generate Report" Command="{Binding GenerateReportCmd}"/>
+                <Button Content="Load GPX" Command="{Binding LoadGpxCmd}"/>
+            </StackPanel>
+        </StackPanel>
+        <ListBox ItemsSource="{Binding WindVms}" Grid.Row="1"
+                 Margin="0 0 4 0"
+                 HorizontalContentAlignment="Stretch"
+                 VirtualizingPanel.ScrollUnit="Pixel">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="local:WindVm">
+                    <local:WindCtrl/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox ItemsSource="{Binding EdgeWindVms}" Grid.Row="1" Grid.Column="1"
+                 VirtualizingPanel.ScrollUnit="Pixel">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="local:WindVm">
+                    <local:WindCtrl Width="400" Height="400"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <GridSplitter VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Right"
+                      Width="5"
+                      Background="Black"
+                      Grid.Row="1"/>
+    </Grid>
+</Window>

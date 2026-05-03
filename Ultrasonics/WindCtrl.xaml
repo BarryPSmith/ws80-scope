@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="Ultrasonics.WindCtrl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ultrasonics"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=local:WindVm}"
+             DataContextChanged="UserControl_DataContextChanged">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="{Binding ExcitationCount}"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Width="30" Margin="20">
+                <Path Data="M0,22 15,0 30,22 22,20 V50 H8 V20 Z" Stroke="Blue">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="{Binding DirectionDegrees}"
+                                         CenterX="15" CenterY="15"/>
+                    </Path.RenderTransform>
+                </Path>
+            </Viewbox>
+            <Border BorderBrush="Black" BorderThickness="1"
+                    Width="200" Height="200"
+                    Grid.Column="1">
+                <Grid>
+                    <Canvas x:Name="canv" Grid.Column="1">
+                
+                    </Canvas>
+                    <Rectangle VerticalAlignment="Center" Stroke="Black" HorizontalAlignment="Stretch"/>
+                    <Rectangle VerticalAlignment="Stretch" Stroke="Black" HorizontalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Speed" Grid.Row="0"/>
+            <TextBox IsReadOnly="True" Text="{Binding Speed, StringFormat=F1}" Grid.Row="0" Grid.Column="1"
+                     Grid.ColumnSpan="2"/>
+            <Label Content="Direction" Grid.Row="1"/>
+            <TextBox IsReadOnly="True" Text="{Binding DirectionDegrees, StringFormat=F0}" Grid.Row="1" Grid.Column="1"
+                     Grid.ColumnSpan="2"/>
+            <Label Content="Residual" Grid.Row="2"/>
+            <TextBox IsReadOnly="True" Text="{Binding WindResidual, StringFormat=F2}" Grid.Row="2" Grid.Column="1"
+                     Grid.ColumnSpan="2"/>
+            <Label Content="Time" Grid.Row="3"/>
+            <TextBox IsReadOnly="True" Text="{Binding FrameTime}" Grid.Row="3" Grid.Column="1"
+                     Grid.ColumnSpan="2"/>
+            <Label Content="Duration" Grid.Row="4"/>
+            <TextBox IsReadOnly="True" Text="{Binding FrameDuration}" Grid.Row="4" Grid.Column="1"
+                     Grid.ColumnSpan="2"/>
+            <Label Content="Avg Speed" Grid.Row="5"/>
+            <TextBox IsReadOnly="True" Text="{Binding AverageSpeed, StringFormat=F1}" Grid.Row="5" Grid.Column="1"/>
+            <TextBox IsReadOnly="True" Text="{Binding WebSpeed, StringFormat=F1}" Grid.Row="5" Grid.Column="2"/>
+            <Label Content="Avg Dir" Grid.Row="6"/>
+            <TextBox IsReadOnly="True" Text="{Binding AverageDir, StringFormat=F0}" Grid.Row="6" Grid.Column="1"/>
+            <TextBox IsReadOnly="True" Text="{Binding WebDir, StringFormat=F0}" Grid.Row="6" Grid.Column="2"/>
+            <Label Content="Ratio" Grid.Row="7"/>
+            <TextBox IsReadOnly="True" Text="{Binding SpeedRatio, StringFormat=F2}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"/>
+        </Grid>
+        <ItemsControl VerticalContentAlignment="Stretch" Grid.Column="1"
+                      Visibility="{Binding ShowCharts, Converter={StaticResource BooleanToVisConverter}}"
+                      ItemsSource="{Binding Charts}"
+                      VerticalAlignment="Stretch"
+                      Grid.RowSpan="5">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <local:Chart Data="{Binding Data1}" Stroke="Red"
+                                     Background="{Binding BackColour}"
+                                     MouseX="{Binding MouseX, Mode=OneWayToSource}"/>
+                        <local:Chart Data="{Binding Data2}" Background="{x:Null}"
+                                     Stroke="Green"/>
+                        <TextBox Text="{Binding Phase, StringFormat=F2}"
+                                   VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <TextBox Text="{Binding SNR, StringFormat=F1}" VerticalAlignment="Bottom"
+                                 HorizontalAlignment="Left"/>
+                        <TextBox Text="{Binding MouseX, Mode=OneWay, StringFormat=F0}" 
+                                   VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</UserControl>

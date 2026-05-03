@@ -1,0 +1,25 @@
+﻿<Window x:Class="Ultrasonics.CalibrationSelectorDlg"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ultrasonics"
+        mc:Ignorable="d"
+        Title="CalibrationSelectorDlg" Height="450" Width="400"
+        d:DataContext="{d:DesignInstance Type=local:SelectionVmDsn}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListBox ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}"
+                 MouseDoubleClick="ListBox_MouseDoubleClick"/>
+        <StackPanel FlowDirection="RightToLeft" Grid.Row="1"
+                    Orientation="Horizontal">
+            <Button Content="OK" IsDefault="True"
+                    Click="OK_Click"/>
+            <Button Content="Cancel" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
