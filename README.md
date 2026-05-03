@@ -47,6 +47,8 @@ A CSV dump of the data can be generated for the current session by pressing "Gen
 # Wind Algorithm Difference
 It should be noted that this software doesn't use exactly the same algorithm as is used in the firmware. This software uses a FFT to calculate the phase / time shift; the firmware does a raw multiply with sine and cosine waveforms. I expect both methods to give very similar results, but haven't verified that.
 
+Also this algorithm is all written using floating point because it's much quicker and easier than the fixed point that is used in the firmware. One consequence of this is that magnitude values are not directly comparable. FirmwareCopy.cs contains an approximate copy of actual the firmware algorithm using fixed point for debugging, testing, and comparison purposes (e.g. that is how I found the thresholds to use for ``adjustRingCounts`` in the firmware ``scope.c``).
+
 # A note on code quality, and contributing
 This was created as a rough and ready test environment for my development of the ws80-alt-firmware. The UI is not very thought through, I put in functions and visualisations as and when I need them. There are limited options on how data is stored and retrieved because I haven't needed anything more complex yet. The ability to get comparison data is hardcoded to get the comparison information from a particular station on my website. Some aspects, like the edge detection method of calculating wind, don't work anymore and should be removed. Some functions were put in as once off test cases, or because I needed a particular piece of data (particularly OnceOff.cs, but also in some other parts of the code.)
 
